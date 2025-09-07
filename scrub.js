@@ -145,13 +145,13 @@ const wideUrls = [
 
     // Others
     "https://www.google.com/search?q=weather+anchorage+usa",
-    "https://www.google.com/search?q=weather+moscow+russia",
     "https://www.google.com/search?q=weather+sydney+australia",
     "https://www.google.com/search?q=weather+glasgow+uk",
     "https://www.google.com/search?q=weather+new+zealand+calne+uk",
     "https://www.google.com/search?q=weather+everett+wa+usa",
     "https://www.google.com/search?q=weather+nuuk+greenland",
     "https://www.google.com/search?q=weather+reykjavík+iceland",
+    "https://www.google.com/search?q=weather+kyiv+ukraine",
 ]
 
 const colorsRegex = /background:-webkit-linear-gradient\((?<colors>.*?)\)/g;
