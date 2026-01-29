@@ -79,9 +79,14 @@ const squareUrls = [
 ];
 
 const wideRegex = /(?<url>https:\/\/www\.gstatic\.com\/weather\/froggie\/l\/)(?<name>.*?)_2x(?<ext>\.png)/g;
+
+// The city to get the current weather image for.
+// You can change this to your city.
+const homeCity = "Lviv";
+
 const wideUrls = [
     // Home
-    "https://www.google.com/search?q=weather+werkendam",
+    `https://www.google.com/search?q=weather+${homeCity.replace(/ /g, "+")}`,
 
     // Top 50 cities
     "https://www.google.com/search?q=weather+venice+italy",
