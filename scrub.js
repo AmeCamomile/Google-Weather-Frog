@@ -2,10 +2,6 @@ const https = require("https");
 const fs = require("fs");
 const { performance } = require('perf_hooks');
 
-// The city to get the current weather image for.
-// You can change this to your city.
-const homeCity = "Lviv";
-
 const squareRegex = /(?<url>https:\/\/ssl.gstatic.com\/onebox\/weather\/doodle\/temp2\/)(?<name>.*?)(?<ext>\.png)/g;
 const squareUrls = [
     // Home
