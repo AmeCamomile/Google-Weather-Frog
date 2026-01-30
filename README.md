@@ -2,13 +2,15 @@
 An automatic scrubber of Google Weather's frog images for personal use.
 
 ## Commands
-| Command         | Description                                            | Logged to                   |
-| :-------------- | :----------------------------------------------------- | :-------------------------- |
-| `cross.sh`      | Cross-sync all image types and names.                  | `cross-[date]_[time].log`   |
-| `scrub.sh`      | Grab the latest images.                                | `scrub-[date]_[time].log`   |
-| `sync.sh`       | Get the corresponding missing wides and/or squares.    | `sync-[date]_[time].log`    |
-| `weather.sh`    | Update pre-defined location weather images.            | `weather-[date]_[time].log` |
-| `website.sh`    | Update the website's `index.html`.                     | `website-[date]_[time].log` |
+| Command                  | Description                                             | Logged to                                 |
+| :----------------------- | :------------------------------------------------------ | :---------------------------------------- |
+| `cross.sh`               | Cross-sync all image types and names.                   | `cross-[date]_[time].log`                 |
+| `scrub.sh`               | Grab the latest images.                                 | `scrub-[date]_[time].log`                 |
+| `scrub_wide_capitals.sh` | Grab the latest wide images for 100 capital cities only.| `scrub_wide_capitals-[date]_[time].log`   |
+| `sync.sh`                | Get the corresponding missing wides and/or squares.     | `sync-[date]_[time].log`                  |
+| `weather.sh`             | Update pre-defined location weather images.             | `weather-[date]_[time].log`               |
+| `weather_wide.sh`        | Update pre-defined location weather wide images.        | `weather-wide-[date]_[time].log`          |
+| `website.sh`             | Update the website's `index.html`.                      | `website-[date]_[time].log`               |
 
 ## Clean-up
 To clean up the massive amounts of `.log` files produced by the bash scripts, you can run a cronjob.
