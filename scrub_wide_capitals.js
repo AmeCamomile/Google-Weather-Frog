@@ -93,14 +93,13 @@ async function runCapitalHarvest() {
                 const destPath = path.join(collectionDir, originalName.replace('_4x', ''));
 
                 console.log(`   ${cleanUrl}`);
-                // console.log(`   ${destPath}`);
 
                 if (fs.existsSync(destPath)) {
-                    console.log(`   ✨ Already have frog: ${originalName}`);
+                    console.log(`✨ Already have frog: ${originalName.replace('_4x', '')}`);
                 } else {
                     const highResUrl = cleanUrl.replace('_2x.png', '_4x.png');
                     await downloadFile(highResUrl, destPath);
-                    console.log(`   🐸 NEW FROG CAPTURED: ${originalName}`);
+                    console.log(`🐸 NEW FROG CAPTURED: ${originalName}`);
                     
                     if (data.gradient) {
                         fs.writeFileSync(destPath.replace('.png', '.css'), `.bg { background: ${data.gradient}; }`);
@@ -108,10 +107,10 @@ async function runCapitalHarvest() {
                 }
             }
         } catch (err) {
-            console.log(`   ⚠️ Error in ${city}: ${err.message}`);
+            console.log(`⚠️ Error in ${city}: ${err.message}`);
         }
 
-        // RANDOM DELAY: Between 2 and 5 seconds
+        // RANDOM DELAY: Between 2 and 10 seconds
         randomWait = Math.floor(Math.random() * (10000 - 2000 + 1)) + 2000;
         await new Promise(r => setTimeout(r, randomWait)); // Random wait to avoid rate limiting
     }
