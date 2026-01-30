@@ -1,1 +1,27 @@
+# Dependency directories
+node_modules/
+bower_components/
+user_data/
+
+# Environment variables (Keep these secret!)
+.env
+*.env.local
+
+# Logs and databases
+logs/
+*.log
+*.sqlite
 **/*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Build outputs
+dist/
+build/
+out/
+
+# Backup files
+*~
+*.bak

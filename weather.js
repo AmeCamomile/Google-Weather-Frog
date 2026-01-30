@@ -2,7 +2,7 @@ const https = require("https");
 const fs = require("fs");
 const { performance } = require('perf_hooks');
 
-const wideRegex = /(?<url>https:\/\/www\.gstatic\.com\/weather\/froggie\/l\/)(?<name>.*?)_2x(?<ext>\.png)/g;
+const wideRegex = /(?<url>https:\/\/www.gstatic.com\/weather\/froggie\/l\/)(?<name>.*?)_2x(?<ext>\.png)/g;
 const locationUrls = [
     ["https://www.google.com/search?q=weather+nieuwendijk", "nieuwendijk"],
 ]
@@ -66,9 +66,16 @@ function getImages(url, regex, getColors = false) {
     });
 }
 
-function downloadFile(url, path) {
+function downloadFile(url, path, logPrefix) {
     return new Promise((resolve, reject) => {
         try {
+            if (fs.existsSync(path) && fs.statSync(path).size > 0) {
+                console.log(logPrefix, `SKIPPED (exists): ${path}`);
+                resolve();
+                return;
+            }
+            
+            console.log(logPrefix, `DOWNLOADING: ${url} -> ${path}`);
             var file = fs.createWriteStream(path);
 
             https.get(url, (response) => {
@@ -94,9 +101,16 @@ function downloadFile(url, path) {
     });
 }
 
-function makeFile(data, path) {
+function makeFile(data, path, logPrefix) {
     return new Promise((resolve, reject) => {
         try {
+            if (fs.existsSync(path) && fs.statSync(path).size > 0) {
+                console.log(logPrefix, `SKIPPED CSS (exists): ${path}`);
+                resolve();
+                return;
+            }
+
+            console.log(logPrefix, `CREATING CSS: ${path}`);
             fs.writeFile(path, data, (error) => {
                 if (error) {
                     reject(error);
@@ -112,6 +126,7 @@ function makeFile(data, path) {
 }
 
 async function doLocationsDownload() {
+    console.log("\n--- Starting Location Weather Download Process ---");
     locationUrls.forEach(async (item, index, array) => {
         nextIterationDelay = nextIterationDelay + iterationDelayAmount;
 
@@ -120,32 +135,38 @@ async function doLocationsDownload() {
             const padLength = array.length.toString().length;
             const currentItemString = "[L: " + realIndex.padStart(padLength, '0') + "/" + array.length + "]";
             const performanceString = "[" + Math.round(performance.now()) + " ms]";
+            const logPrefix = `${currentItemString} ${performanceString}`;
+            const locationName = item[1];
+            const locationUrl = item[0];
 
-            var result = await getImages(item[0], wideRegex, true).catch((error) => console.log(currentItemString, performanceString, "Item failed:", JSON.stringify(error)));
+            console.log(logPrefix, `Processing location '${locationName}' from URL: ${locationUrl}`);
+            
+            var result = await getImages(locationUrl, wideRegex, true).catch((error) => console.log(logPrefix, "Item failed:", JSON.stringify(error)));
 
             if (result === undefined) {
                 return;
             }
 
             if (result.length < 1) {
-                console.log(currentItemString, performanceString, "Item failed, empty result:", item[0]);
+                console.log(logPrefix, "Item failed, no images found in response.");
                 return;
             }
 
+            console.log(logPrefix, `Found ${result.length} image(s) for '${locationName}'.`);
             result.forEach(async (image) => {
-                console.log(currentItemString, performanceString, "Item:", image.name + image.extension)
-                var css = ".weather-frog { background: linear-gradient(" + image.gradient + "); background: -moz-linear-gradient(" + image.gradient + "); background: -ms-linear-gradient(" + image.gradient + "); background: -o-linear-gradient(" + image.gradient + "); background: -webkit-linear-gradient(" + image.gradient + "); }";
+                const css = ".weather-frog { background: linear-gradient(" + image.gradient + "); background: -moz-linear-gradient(" + image.gradient + "); background: -ms-linear-gradient(" + image.gradient + "); background: -o-linear-gradient(" + image.gradient + "); background: -webkit-linear-gradient(" + image.gradient + "); }";
+                const cssPath = "./locations/" + locationName + "/weather-frog.css";
+                await makeFile(css, cssPath, logPrefix).catch((error) => console.log(logPrefix, "CSS creation failed:", JSON.stringify(error)));
                 
-                await makeFile(css, "./locations/" + item[1] + "/weather-frog.css");
-                await downloadFile(image.url.replace("_2x.png", "_4x.png"), "./locations/" + item[1] + "/weather-frog" + image.extension).catch((error) => console.log(currentItemString, performanceString, "Item failed:", JSON.stringify(error)));
+                const destPath = "./locations/" + locationName + "/weather-frog" + image.extension;
+                const srcUrl = image.url.replace("_2x.png", "_4x.png");
+                await downloadFile(srcUrl, destPath, logPrefix).catch((error) => console.log(logPrefix, "Download failed:", JSON.stringify(error)));
             });
-
-            console.log(currentItemString, performanceString, "Item complete.");
         }, nextIterationDelay);
     });
 }
 
 console.log("=== [" + new Date().toString() + "] ===");
-console.log("Totals: " + locationUrls.length + " location URL(s)");
+console.log("Location scraper starting. Totals: " + locationUrls.length + " location URL(s)");
 
 doLocationsDownload().catch((error) => console.error(error));

@@ -103,9 +103,12 @@ async function doSyncTypes() {
 
             var url = "https://www.gstatic.com/weather/froggie/l/" + file;
 
-            await downloadFile(url + "_4x.png", "./images/wide/" + file + ".png").catch((error) => console.log(currentItemString, performanceString, "Item failed:", JSON.stringify(error)));
-
-            console.log(currentItemString, performanceString, "Item complete.");
+            try {
+                await downloadFile(url + "_4x.png", "./images/wide/" + file + ".png").catch((error) => console.log(currentItemString, performanceString, file, "Item failed:", JSON.stringify(error)));
+                // console.log(currentItemString, performanceString, file, "Item complete.");
+            } catch (error) {
+                // console.log(currentItemString, performanceString, "Item failed:", JSON.stringify(error));
+            }
         }, nextIterationDelay);
     });
 }

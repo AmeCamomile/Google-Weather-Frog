@@ -65,7 +65,7 @@ async function doSyncWides() {
             await downloadFile(url + "_c_4x.png", "./images/wide/" + file + "_c.png").catch((error) => console.log(currentItemString, performanceString, "Item failed:", JSON.stringify(error)));
             await downloadFile(url + "_f_4x.png", "./images/wide/" + file + "_f.png").catch((error) => console.log(currentItemString, performanceString, "Item failed:", JSON.stringify(error)));
 
-            console.log(currentItemString, performanceString, "Item complete.");
+            console.log(currentItemString, performanceString, file, "Item complete.");
         }, nextIterationDelay);
     });
 }
@@ -91,11 +91,11 @@ async function doSyncSquares() {
 
             var url = "https://ssl.gstatic.com/onebox/weather/doodle/temp2/" + file;
 
-            await downloadFile(url + "_bg.png", "./images/square/" + file + "_bg.png").catch((error) => console.log(currentItemString, performanceString, "Item failed:", JSON.stringify(error)));
-            await downloadFile(url + "_fg.png", "./images/square/" + file + "_fg.png").catch((error) => console.log(currentItemString, performanceString, "Item failed:", JSON.stringify(error)));
-            await downloadFile(url + "_mg.png", "./images/square/" + file + "_mg.png").catch((error) => console.log(currentItemString, performanceString, "Item failed:", JSON.stringify(error)));
+            await downloadFile(url + "_bg.png", "./images/square/" + file + "_bg.png").catch((error) => console.log(currentItemString, performanceString, file, "Item failed:", JSON.stringify(error)));
+            await downloadFile(url + "_fg.png", "./images/square/" + file + "_fg.png").catch((error) => console.log(currentItemString, performanceString, file, "Item failed:", JSON.stringify(error)));
+            await downloadFile(url + "_mg.png", "./images/square/" + file + "_mg.png").catch((error) => console.log(currentItemString, performanceString, file, "Item failed:", JSON.stringify(error)));
 
-            console.log(currentItemString, performanceString, "Item complete.");
+            console.log(currentItemString, performanceString, file, "Item complete.");
         }, nextIterationDelay);
     })
 }
